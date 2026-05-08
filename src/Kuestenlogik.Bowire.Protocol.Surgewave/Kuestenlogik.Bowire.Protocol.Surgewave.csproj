@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Bowire Surgewave protocol plugin — browse topics, produce/consume messages, and replay recordings over the native Surgewave protocol. Built on the Kuestenlogik.Surgewave.Client SDK.</Description>
+    <PackageId>Kuestenlogik.Bowire.Protocol.Surgewave</PackageId>
+    <PackageTags>bowire;bowire-plugin;surgewave;kafka;messaging;developer-tools;kuestenlogik</PackageTags>
+    <IsPackable>true</IsPackable>
+    <!-- CA1873: structured-log args that are plain property accesses. -->
+    <NoWarn>$(NoWarn);CA1873</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <InternalsVisibleTo Include="Kuestenlogik.Bowire.Protocol.Surgewave.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Kuestenlogik.Bowire" />
+    <PackageReference Include="Kuestenlogik.Surgewave.Client" />
+    <PackageReference Include="Confluent.SchemaRegistry" />
+    <PackageReference Include="Confluent.SchemaRegistry.Serdes.Avro" />
+  </ItemGroup>
+
+</Project>

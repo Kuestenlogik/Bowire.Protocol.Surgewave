@@ -1,0 +1,32 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Bowire contract package (IBowireProtocol + IBowireMockEmitter
+         under Kuestenlogik.Bowire.Mocking since Bowire v0.2). -->
+    <PackageVersion Include="Kuestenlogik.Bowire" Version="1.0.0" />
+
+    <!-- Surgewave client — the native Surgewave SDK. Resolves from
+         ../Surgewave/artifacts/packages during local dev (run
+         `dotnet pack` in the Surgewave repo once); from nuget.org for
+         release builds. -->
+    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.1.0" />
+
+    <!-- Confluent Schema Registry — used by the kafka-mode Surgewave
+         path. Surgewave's broker speaks Kafka wire, and Confluent's
+         wire-format envelope (5-byte magic + schema id + Avro/JSON
+         body) is the de-facto standard for typed payloads on Kafka.
+         The decoder code is intentionally duplicated from
+         Bowire.Protocol.Kafka rather than shared via a common
+         library — two consumers don't yet justify a third package. -->
+    <PackageVersion Include="Confluent.SchemaRegistry" Version="2.12.0" />
+    <PackageVersion Include="Confluent.SchemaRegistry.Serdes.Avro" Version="2.12.0" />
+
+    <!-- Test-only -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
+    <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.203" />
+  </ItemGroup>
+</Project>
