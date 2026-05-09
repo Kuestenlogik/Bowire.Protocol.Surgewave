@@ -35,4 +35,22 @@ jobs:
         run: dotnet build Bowire.Protocol.Surgewave.slnx -c Release --no-restore
 
       - name: Test
-        run: dotnet test Bowire.Protocol.Surgewave.slnx -c Release --no-build -v normal
+        # XPlat Code Coverage drops one coverage.cobertura.xml per test
+        # project under artifacts/coverage/<guid>/. codecov/codecov-action
+        # globs them up directly — no merge step needed on our side.
+        run: >
+          dotnet test Bowire.Protocol.Surgewave.slnx -c Release --no-build -v normal
+          --collect:"XPlat Code Coverage"
+          --results-directory artifacts/coverage
+
+      - name: Upload coverage to Codecov
+        # Skip on fork PRs — the secret isn't injected for outside
+        # contributors, the upload would fail noisily otherwise.
+        if: ${{ !github.event.pull_request.head.repo.fork }}
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          directory: artifacts/coverage
+          files: '**/coverage.cobertura.xml'
+          flags: unittests
+          fail_ci_if_error: false
