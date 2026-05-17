@@ -47,7 +47,7 @@ jobs:
         # Skip on fork PRs — the secret isn't injected for outside
         # contributors, the upload would fail noisily otherwise.
         if: ${{ !github.event.pull_request.head.repo.fork }}
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@v6
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: artifacts/coverage
