@@ -1,14 +1,11 @@
 <Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
-    <!-- Required so the floating "1.4.*" pin on Kuestenlogik.Bowire below
-         resolves under Central Package Management (NU1011 otherwise). -->
-    <CentralPackageFloatingVersionsEnabled>true</CentralPackageFloatingVersionsEnabled>
   </PropertyGroup>
   <ItemGroup>
     <!-- Bowire contract package (IBowireProtocol + IBowireMockEmitter
          under Kuestenlogik.Bowire.Mocking since Bowire v0.2). -->
-    <PackageVersion Include="Kuestenlogik.Bowire" Version="1.4.*" />
+    <PackageVersion Include="Kuestenlogik.Bowire" Version="1.4.4" />
 
     <!-- Surgewave client — the native Surgewave SDK. Resolves from
          ../Surgewave/artifacts/packages during local dev (run
