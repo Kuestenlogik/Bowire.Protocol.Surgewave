@@ -11,7 +11,7 @@
          ../Surgewave/artifacts/packages during local dev (run
          `dotnet pack` in the Surgewave repo once); from nuget.org for
          release builds. -->
-    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.1.10" />
+    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.1.13" />
 
     <!-- Confluent Schema Registry — used by the kafka-mode Surgewave
          path. Surgewave's broker speaks Kafka wire, and Confluent's
