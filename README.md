@@ -4,7 +4,7 @@
 [![codecov](https://codecov.io/gh/Kuestenlogik/Bowire.Protocol.Surgewave/branch/main/graph/badge.svg)](https://codecov.io/gh/Kuestenlogik/Bowire.Protocol.Surgewave)
 [![NuGet](https://img.shields.io/nuget/v/Kuestenlogik.Bowire.Protocol.Surgewave)](https://www.nuget.org/packages/Kuestenlogik.Bowire.Protocol.Surgewave)
 [![License](https://img.shields.io/github/license/Kuestenlogik/Bowire.Protocol.Surgewave)](https://github.com/Kuestenlogik/Bowire.Protocol.Surgewave/blob/main/LICENSE)
-[![Bowire](https://img.shields.io/badge/Bowire-%E2%89%A5%201.5.0%2C%20%3C%202.0-006B9F)](https://github.com/Kuestenlogik/Bowire/blob/main/docs/architecture/compatibility.md)
+[![Bowire](https://img.shields.io/badge/Bowire-%E2%89%A5%202.2.1%2C%20%3C%203.0-006B9F)](https://github.com/Kuestenlogik/Bowire/blob/main/docs/architecture/compatibility.md)
 
 Native [Kuestenlogik.Surgewave](https://github.com/Kuestenlogik/Surgewave) protocol plugin for the [Bowire](https://github.com/Kuestenlogik/Bowire) workbench. Browse topics, produce / consume messages, and replay recordings over the Surgewave wire protocol via the `Kuestenlogik.Surgewave.Client` SDK. Sibling to [`Bowire.Protocol.Kafka`](https://github.com/Kuestenlogik/Bowire.Protocol.Kafka) — Kafka plugin for generic Confluent.Kafka-based clusters, Surgewave plugin for Surgewave-native deployments.
 
