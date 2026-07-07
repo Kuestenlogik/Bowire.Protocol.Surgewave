@@ -17,10 +17,10 @@ namespace Kuestenlogik.Bowire.Protocol.Surgewave.Tests;
 /// server (in-memory <see cref="HttpListener"/>) serves a minimal Avro
 /// schema, the test encodes a payload with the Confluent wire format
 /// (<c>0x00</c> magic + 4-byte schema id + Avro body), and
-/// <see cref="KafkaSchemaRegistry.TryDecodeAsync"/> hands back the JSON
+/// <see cref="SurgewaveSchemaRegistry.TryDecodeAsync"/> hands back the JSON
 /// projection.
 /// </summary>
-public class KafkaSchemaRegistryDecodeTests
+public class SurgewaveSchemaRegistryDecodeTests
 {
     private const string OrderSchemaJson = """
         {
@@ -52,7 +52,7 @@ public class KafkaSchemaRegistryDecodeTests
             ["total"] = 19.95,
         });
 
-        using var registry = new KafkaSchemaRegistry(sr.Url);
+        using var registry = new SurgewaveSchemaRegistry(sr.Url);
         var json = await registry.TryDecodeAsync(payload);
 
         Assert.NotNull(json);
@@ -71,7 +71,7 @@ public class KafkaSchemaRegistryDecodeTests
             new Dictionary<int, (string Type, string Schema)>(),
             new Dictionary<string, (int Id, int Version, string Type, string Schema)>());
 
-        using var registry = new KafkaSchemaRegistry(sr.Url);
+        using var registry = new SurgewaveSchemaRegistry(sr.Url);
         Assert.Null(await registry.TryDecodeAsync(Encoding.UTF8.GetBytes("{\"raw\": true}")));
     }
 
@@ -82,7 +82,7 @@ public class KafkaSchemaRegistryDecodeTests
             new Dictionary<int, (string Type, string Schema)>(),
             new Dictionary<string, (int Id, int Version, string Type, string Schema)>());
 
-        using var registry = new KafkaSchemaRegistry(sr.Url);
+        using var registry = new SurgewaveSchemaRegistry(sr.Url);
         Assert.Null(await registry.TryDecodeAsync(new byte[] { 0x00, 0x01 }));
     }
 
@@ -96,7 +96,7 @@ public class KafkaSchemaRegistryDecodeTests
                 ["orders-value"] = (1, 1, "AVRO", OrderSchemaJson),
             });
 
-        using var registry = new KafkaSchemaRegistry(sr.Url);
+        using var registry = new SurgewaveSchemaRegistry(sr.Url);
         var schema = await registry.TryGetLatestAsync("orders-value");
         Assert.NotNull(schema);
         Assert.Equal(1, schema!.Id);
@@ -129,9 +129,11 @@ public class KafkaSchemaRegistryDecodeTests
 
     /// <summary>
     /// Minimal Schema Registry stand-in for the decode tests. Implements
-    /// the two endpoints CachedSchemaRegistryClient hits: GET schemas/ids/{id}
-    /// and GET subjects/{subject}/versions/latest. Skips auth, security,
-    /// and the dozen other endpoints — Bowire only reads.
+    /// the two endpoints SurgewaveSchemaRegistry hits over plain HTTP:
+    /// GET schemas/ids/{id} and GET subjects/{subject}/versions/latest.
+    /// This is the Confluent-compatible REST surface that both a native
+    /// Surgewave registry and a Confluent registry expose. Skips auth,
+    /// security, and the dozen other endpoints — Bowire only reads.
     /// </summary>
     private sealed class FakeSchemaRegistry : IAsyncDisposable
     {

@@ -20,8 +20,10 @@
   <ItemGroup>
     <PackageReference Include="Kuestenlogik.Bowire" />
     <PackageReference Include="Kuestenlogik.Surgewave.Client" />
-    <PackageReference Include="Confluent.SchemaRegistry" />
-    <PackageReference Include="Confluent.SchemaRegistry.Serdes.Avro" />
+    <!-- Apache Avro decode only. The Confluent-wire schema fetch is a plain
+         HTTP GET (SurgewaveSchemaRegistry) so the plugin does NOT depend on
+         any Confluent library — Confluent stays an opt-in adapter. -->
+    <PackageReference Include="Apache.Avro" />
   </ItemGroup>
 
 </Project>

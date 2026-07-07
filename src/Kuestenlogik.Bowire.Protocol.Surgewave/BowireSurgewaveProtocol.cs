@@ -313,7 +313,7 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
         // meaningful in the Kafka-wire mode; the native protocol carries
         // its own typed envelope already.
         using var registry = endpoint.Value.SchemaRegistryUrl is { Length: > 0 } srUrl
-            ? new KafkaSchemaRegistry(srUrl)
+            ? new SurgewaveSchemaRegistry(srUrl)
             : null;
 
         try
@@ -368,7 +368,7 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
     /// </summary>
     internal static async Task<string> BuildEnvelopeAsync(
         Kuestenlogik.Surgewave.Client.Consumer.ConsumeResult<byte[]?, byte[]> result,
-        KafkaSchemaRegistry? registry)
+        SurgewaveSchemaRegistry? registry)
     {
         var keyBytes = result.Key;
         var valueBytes = result.Value ?? [];
