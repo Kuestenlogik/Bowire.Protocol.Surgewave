@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "entries": [
+    {
+      "url": "surgewave://embedded",
+      "name": "Embedded broker (in-process)",
+      "protocols": ["surgewave"],
+      "tags": ["sample", "surgewave", "embedded"]
+    }
+  ]
+}

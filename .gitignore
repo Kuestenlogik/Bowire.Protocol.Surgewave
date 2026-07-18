@@ -416,3 +416,7 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# Embedded Surgewave broker data directory (the sample's in-memory broker
+# still stamps a data dir under its run/working directory).
+surgewave-data/
