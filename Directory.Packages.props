@@ -7,11 +7,18 @@
          under Kuestenlogik.Bowire.Mocking since Bowire v0.2). -->
     <PackageVersion Include="Kuestenlogik.Bowire" Version="2.2.1" />
 
-    <!-- Surgewave client — the native Surgewave SDK. Resolves from
-         ../Surgewave/artifacts/packages during local dev (run
+    <!-- Surgewave SDK (client + in-process broker) — the native
+         Surgewave stack, kept in lockstep at the same release. Resolves
+         from ../Surgewave/artifacts/packages during local dev (run
          `dotnet pack` in the Surgewave repo once); from nuget.org for
-         release builds. -->
-    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.3.1" />
+         release builds. The Broker package backs the sample's embedded
+         `surgewave://embedded` tap (AddSurgewaveBroker). -->
+    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.4.0" />
+    <!-- Surgewave.Hosting backs the sample's self-contained embedded
+         broker: builder.AddSurgewave() runs an in-process broker and
+         AddSurgewaveProducerForEmbeddedBroker wires a producer to it, so
+         the sample needs no docker. Pulls Broker + Client transitively. -->
+    <PackageVersion Include="Kuestenlogik.Surgewave.Hosting" Version="0.4.0" />
 
     <!-- Apache Avro — decodes Confluent wire-format payloads (5-byte magic +
          schema id + Avro body) in the browser. The schema itself is fetched
