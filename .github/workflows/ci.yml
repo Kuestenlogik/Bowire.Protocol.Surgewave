@@ -39,8 +39,9 @@ jobs:
         # project under artifacts/coverage/<guid>/. codecov/codecov-action
         # globs them up directly — no merge step needed on our side.
         run: >
-          dotnet test Bowire.Protocol.Surgewave.slnx -c Release --no-build -v normal
-          --collect:"XPlat Code Coverage"
+          dotnet test --solution Bowire.Protocol.Surgewave.slnx -c Release --no-build
+          --coverage
+          --coverage-output-format cobertura
           --results-directory artifacts/coverage
 
       - name: Upload coverage to Codecov
@@ -51,6 +52,6 @@ jobs:
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           directory: artifacts/coverage
-          files: '**/coverage.cobertura.xml'
+          files: '**/*.cobertura.xml'
           flags: unittests
           fail_ci_if_error: false

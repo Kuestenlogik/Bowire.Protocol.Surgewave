@@ -14,7 +14,7 @@ public sealed class BowireSurgewaveProtocolTests
     public async Task Discover_WithMalformedUrl_ReturnsEmpty()
     {
         var plugin = new BowireSurgewaveProtocol();
-        var services = await plugin.DiscoverAsync("http://example.com", false);
+        var services = await plugin.DiscoverAsync("http://example.com", false, ct: TestContext.Current.CancellationToken);
         Assert.Empty(services);
     }
 
@@ -24,7 +24,7 @@ public sealed class BowireSurgewaveProtocolTests
         var plugin = new BowireSurgewaveProtocol();
         var result = await plugin.InvokeAsync(
             "surgewave://broker:9092", "orders", BowireSurgewaveProtocol.ConsumeMethodName,
-            ["{}"], false);
+            ["{}"], false, ct: TestContext.Current.CancellationToken);
         Assert.Contains("consume", result.Status, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -33,7 +33,7 @@ public sealed class BowireSurgewaveProtocolTests
     {
         var plugin = new BowireSurgewaveProtocol();
         var result = await plugin.InvokeAsync(
-            "https://nope", "orders", BowireSurgewaveProtocol.ProduceMethodName, ["{}"], false);
+            "https://nope", "orders", BowireSurgewaveProtocol.ProduceMethodName, ["{}"], false, ct: TestContext.Current.CancellationToken);
         Assert.Contains("Invalid", result.Status, StringComparison.OrdinalIgnoreCase);
     }
 
@@ -70,7 +70,7 @@ public sealed class BowireSurgewaveProtocolTests
         var plugin = new BowireSurgewaveProtocol();
         plugin.Initialize(BuildServicesWithTap(new FakeObservability()));
 
-        var services = await plugin.DiscoverAsync("surgewave://embedded", false);
+        var services = await plugin.DiscoverAsync("surgewave://embedded", false, ct: TestContext.Current.CancellationToken);
 
         Assert.Equal(2, services.Count);
         Assert.Contains(services, s => s.Name == BowireSurgewaveProtocol.ClusterServiceName);
@@ -102,7 +102,7 @@ public sealed class BowireSurgewaveProtocolTests
         var envelopes = new List<string>();
         await foreach (var e in plugin.InvokeStreamAsync(
             "surgewave://embedded", BowireSurgewaveProtocol.EmbeddedTapServiceName,
-            BowireSurgewaveProtocol.ConsumeMethodName, [], false))
+            BowireSurgewaveProtocol.ConsumeMethodName, [], false, ct: TestContext.Current.CancellationToken))
         {
             envelopes.Add(e);
         }
@@ -127,7 +127,7 @@ public sealed class BowireSurgewaveProtocolTests
         var count = 0;
         await foreach (var _ in plugin.InvokeStreamAsync(
             "surgewave://embedded", BowireSurgewaveProtocol.EmbeddedTapServiceName,
-            BowireSurgewaveProtocol.ConsumeMethodName, [], false))
+            BowireSurgewaveProtocol.ConsumeMethodName, [], false, ct: TestContext.Current.CancellationToken))
         {
             count++;
         }

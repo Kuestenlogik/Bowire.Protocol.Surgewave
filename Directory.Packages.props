@@ -30,13 +30,16 @@
     <PackageVersion Include="Apache.Avro" Version="1.12.1" />
 
     <!-- Test-only -->
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.8.1" />
-    <PackageVersion Include="xunit" Version="2.9.3" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
-    <!-- XPlat coverage collector — drives the dotnet test coverage
-         collection flag and drops one cobertura.xml per test project
-         for CI / Codecov upload. -->
-    <PackageVersion Include="coverlet.collector" Version="10.0.1" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.0" />
+    <!-- MTP coverage extension — drives the coverage flag of the new
+         dotnet test surface and drops one <guid>.cobertura.xml per test
+         project for the Codecov upload. Replaced coverlet.collector, which
+         is a VSTest collector and does nothing under Microsoft.Testing.
+         Platform. Note the flat file name: the old Codecov glob looked for
+         a fixed coverage.cobertura.xml in a sub-directory and would have
+         matched nothing. -->
+    <PackageVersion Include="Microsoft.Testing.Extensions.CodeCoverage" Version="18.10.0" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="10.0.400" />
   </ItemGroup>
 </Project>
