@@ -27,7 +27,7 @@
          dependency: browsing typed payloads works against a native Surgewave
          registry AND a drop-in Confluent registry, and a fully-migrated
          deployment ships zero Confluent baggage. -->
-    <PackageVersion Include="Apache.Avro" Version="1.12.1" />
+    <PackageVersion Include="Apache.Avro" Version="1.12.2" />
 
     <!-- Test-only -->
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.9.0" />
