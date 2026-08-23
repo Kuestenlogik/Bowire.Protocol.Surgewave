@@ -18,7 +18,7 @@
          broker: builder.AddSurgewave() runs an in-process broker and
          AddSurgewaveProducerForEmbeddedBroker wires a producer to it, so
          the sample needs no docker. Pulls Broker + Client transitively. -->
-    <PackageVersion Include="Kuestenlogik.Surgewave.Hosting" Version="0.4.0" />
+    <PackageVersion Include="Kuestenlogik.Surgewave.Hosting" Version="0.5.0" />
 
     <!-- Apache Avro — decodes Confluent wire-format payloads (5-byte magic +
          schema id + Avro body) in the browser. The schema itself is fetched
