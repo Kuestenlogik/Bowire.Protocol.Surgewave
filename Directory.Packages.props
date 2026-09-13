@@ -30,7 +30,7 @@
     <PackageVersion Include="Apache.Avro" Version="1.12.2" />
 
     <!-- Test-only -->
-    <PackageVersion Include="xunit.v3" Version="4.0.0" />
+    <PackageVersion Include="xunit.v3" Version="4.0.1" />
     <!-- MTP coverage extension — drives the coverage flag of the new
          dotnet test surface and drops one <guid>.cobertura.xml per test
          project for the Codecov upload. Replaced coverlet.collector, which
