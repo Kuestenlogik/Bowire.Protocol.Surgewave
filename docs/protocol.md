@@ -76,6 +76,15 @@ Unknown values fall back to `auto`, so a typo never breaks discovery.
 
 Connects via `SurgewaveClient.Create(...).BuildAsync()` and surfaces a `Cluster` service with broker metadata. Topic enumeration on the native Surgewave protocol is pending an admin/metadata API on the client SDK — once that lands, topics populate the sidebar the same way the [Kafka plugin](kafka.md) already does via `IAdminClient.GetMetadata`. Until then, type the topic name into the workbench's method dropdown.
 
+### Settings
+
+Both live under Settings → Surgewave in the workbench and take effect on the next call.
+
+| Setting | Default | What it does |
+|---------|---------|--------------|
+| `discoveryTimeoutSeconds` | `5` | Bounds the discovery probe. A broker that neither answers nor refuses would otherwise hold the sidebar open until the caller gave up. |
+| `clientIdPrefix` | `bowire` | Prefix for the client id this plugin presents; a short random suffix is appended so two workbench tabs against one broker don't collide. |
+
 ## Methods
 
 Per topic, identical shape to [`Bowire.Protocol.Kafka`](kafka.md):

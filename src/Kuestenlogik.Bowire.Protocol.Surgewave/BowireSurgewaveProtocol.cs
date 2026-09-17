@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using Kuestenlogik.Bowire;
 using Kuestenlogik.Bowire.Models;
+using Kuestenlogik.Bowire.Plugins;
 using Kuestenlogik.Surgewave.Client;
 using Kuestenlogik.Surgewave.Client.Abstractions;
 using Kuestenlogik.Surgewave.Core.Observability;
@@ -73,6 +74,43 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
     public void Initialize(IServiceProvider? serviceProvider)
     {
         _serviceProvider = serviceProvider;
+        _settings = serviceProvider?.GetService(typeof(IBowirePluginSettings)) as IBowirePluginSettings;
+    }
+
+    /// <summary>
+    /// Workspace settings, resolved in <see cref="Initialize"/>; null when
+    /// the host registered none, which is the CLI's case and every host
+    /// before Kuestenlogik/Bowire#640.
+    /// </summary>
+    private IBowirePluginSettings? _settings;
+
+    /// <summary>
+    /// How long the discovery probe may spend reaching the broker, per the
+    /// workspace's setting.
+    /// </summary>
+    /// <remarks>
+    /// Both settings on this plugin were declared and then read by nothing
+    /// — the same gap DIS closed in Kuestenlogik/Bowire#640. The value
+    /// persisted across reloads, so raising it looked like it had taken.
+    /// </remarks>
+    internal TimeSpan DiscoveryTimeout()
+        => _settings?.GetSeconds(Id, "discoveryTimeoutSeconds", TimeSpan.FromSeconds(5))
+            ?? TimeSpan.FromSeconds(5);
+
+    /// <summary>
+    /// Client id for this connection: the configured prefix plus a short
+    /// random suffix, so two workbench tabs against one broker don't
+    /// collide.
+    /// </summary>
+    /// <remarks>
+    /// Brokers that authorize or rate-limit by client id are the reason
+    /// this is a setting rather than a constant.
+    /// </remarks>
+    internal string NewClientId()
+    {
+        var configured = _settings?.GetValue(Id, "clientIdPrefix");
+        var prefix = string.IsNullOrWhiteSpace(configured) ? "bowire" : configured.Trim();
+        return prefix + "-" + Guid.NewGuid().ToString("N")[..12];
     }
 
     /// <inheritdoc />
@@ -132,7 +170,12 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
             // DiscoverAsync has no metadata parameter today — auth markers
             // can't ride here. Once IBowireProtocol gains metadata-aware
             // discovery, the same SurgewaveSecurityConfig path kicks in.
-            await using var client = await BuildSurgewaveClientAsync(endpoint.Value, metadata: null, ct);
+            // The probe is bounded by the discovery timeout: an
+            // unreachable broker that neither refuses nor answers would
+            // otherwise hold the sidebar open until the caller gave up.
+            using var probeCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            probeCts.CancelAfter(DiscoveryTimeout());
+            await using var client = await BuildSurgewaveClientAsync(endpoint.Value, metadata: null, probeCts.Token);
             _ = client.IsConnected; // probe; no-op on fake URLs, throws on real connection errors
         }
         catch (Exception)
@@ -150,12 +193,13 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
     /// auth markers in <paramref name="metadata"/>. <see cref="ProtocolType.Auto"/>
     /// uses the SDK default (try Surgewave-native, fall back to Kafka).
     /// </summary>
-    private static Task<ISurgewaveClient> BuildSurgewaveClientAsync(
+    private Task<ISurgewaveClient> BuildSurgewaveClientAsync(
         SurgewaveConnection.Endpoint endpoint,
         IReadOnlyDictionary<string, string>? metadata,
         CancellationToken ct)
     {
-        var builder = SurgewaveClient.Create(endpoint.BootstrapServers);
+        var builder = SurgewaveClient.Create(endpoint.BootstrapServers)
+            .WithClientId(NewClientId());
         builder = endpoint.Protocol switch
         {
             ProtocolType.SurgewaveNative => builder.UseSurgewaveProtocol(),
