@@ -7,8 +7,8 @@ What this plugin covers from the Surgewave SDK surface, and what it deliberately
 | Source | Carrier | Tested | Notes |
 |--------|---------|:-:|-------|
 | **Native Surgewave protocol** | `Kuestenlogik.Surgewave.Client.ISurgewaveClient` produce + consume APIs | ✅ | Default mode for `surgewave://` URLs. Native framing, partitioned consume, consumer-group state. |
-| **Kafka-compat wire** | Same broker via Confluent.Kafka client when URL has `?protocol=kafka` | ✅ | The Surgewave broker speaks both wires; the plugin lets users pick which to inspect. |
-| **Confluent Schema Registry decode** | `Confluent.SchemaRegistry` + `Confluent.SchemaRegistry.Serdes.Avro` | ✅ | When `?schema-registry=…` is on the URL, Avro / JSON / Protobuf payloads decode inline; envelope keeps the JSON projection plus an `encoding` tag. |
+| **Kafka-compat wire** | Same `ISurgewaveClient`, switched with `UseKafkaProtocol()` when the URL has `?protocol=kafka` | ✅ | The Surgewave broker speaks both wires; the plugin lets users pick which to inspect. No Confluent client involved. |
+| **Schema Registry decode** | `SurgewaveSchemaRegistry` — the registry's REST API over a plain `HttpClient`, Avro via Apache.Avro | ✅ Avro, JSON · ⏳ Protobuf | When `?schema-registry=…` is on the URL, wire-format payloads (magic byte + schema id) decode inline against Surgewave's registry or any Confluent-compatible one; envelope keeps the JSON projection plus an `encoding` tag. No Confluent library since 6e38a7c. Protobuf-schema payloads are not decoded yet and stay raw. |
 | **In-process tap** (`surgewave://embedded`) | `ISurgewaveBrokerObservability` event stream | ✅ | When Bowire is hosted inside the broker process, taps every `SurgewaveBrokerEvent` (Produced / Consumed / Rejected / Rebalanced) without going through the network. |
 | **mTLS + SASL auth** | `__bowireMtls__` / `__bowireKafkaSasl__` metadata markers | ✅ | Same auth-helper markers as the Kafka plugin; markers stripped from metadata before the wire. |
 
