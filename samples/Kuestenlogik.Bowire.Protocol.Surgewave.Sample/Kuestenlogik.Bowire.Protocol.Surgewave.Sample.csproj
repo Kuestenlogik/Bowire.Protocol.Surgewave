@@ -3,11 +3,6 @@
   <PropertyGroup>
     <IsPackable>false</IsPackable>
     <RootNamespace>Kuestenlogik.Bowire.Protocol.Surgewave.Sample</RootNamespace>
-    <!-- Sample-app code, not a library: CA1515 (make types internal) and
-         CA1812 (uninstantiated internal class — the host activates the
-         hosted service via DI) don't apply; CA1873 (defer logger-arg
-         evaluation) is overkill at this sample's volume. -->
-    <NoWarn>$(NoWarn);CA1515;CA1812;CA1873</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

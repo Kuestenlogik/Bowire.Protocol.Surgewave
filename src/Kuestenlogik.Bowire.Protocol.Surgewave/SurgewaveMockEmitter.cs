@@ -57,8 +57,11 @@ public sealed class SurgewaveMockEmitter : IBowireMockEmitter
         _cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         _schedulerTask = Task.Run(() => RunAsync(surgewaveSteps, options, logger, _cts.Token), _cts.Token);
 
-        logger.LogInformation(
-            "surgewave-emitter sending → {Bootstrap} (steps={Count})", bootstrap, surgewaveSteps.Count);
+        if (logger.IsEnabled(LogLevel.Information))
+        {
+            logger.LogInformation(
+                "surgewave-emitter sending → {Bootstrap} (steps={Count})", bootstrap, surgewaveSteps.Count);
+        }
     }
 
     private static bool IsSurgewaveStep(BowireRecordingStep s) =>
@@ -150,9 +153,12 @@ public sealed class SurgewaveMockEmitter : IBowireMockEmitter
             {
                 await _producer!.ProduceAsync(step.Service, key, payload, ct);
             }
-            logger.LogInformation(
-                "surgewave-emit(step={StepId}, topic={Topic}, bytes={Bytes})",
-                step.Id, step.Service, payload.Length);
+            if (logger.IsEnabled(LogLevel.Information))
+            {
+                logger.LogInformation(
+                    "surgewave-emit(step={StepId}, topic={Topic}, bytes={Bytes})",
+                    step.Id, step.Service, payload.Length);
+            }
         }
         catch (Exception ex) when (ex is not OperationCanceledException)
         {
