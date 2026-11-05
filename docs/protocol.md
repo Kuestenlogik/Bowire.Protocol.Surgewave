@@ -92,9 +92,11 @@ Per topic, identical shape to [`Bowire.Protocol.Kafka`](kafka.md):
 | Method    | Kind            | Description |
 |-----------|-----------------|-------------|
 | `consume` | ServerStreaming | Subscribe + yield one JSON envelope per message (topic, partition, offset, timestamp, key/keyBase64, value/valueBase64, bytes) |
-| `produce` | Unary           | Publish one message; optional `key` and `partition` via metadata |
+| `produce` | Unary           | Publish one message; optional `key` and `partition` via metadata, every other metadata key as a record header |
 
 The envelope shape matches [`Bowire.Protocol.Kafka`](kafka.md) byte-for-byte, so a recording captured against one plugin replays against the other — swap the step's `protocol` string from `"kafka"` to `"surgewave"` (or vice versa).
+
+A consumed record's headers arrive in the envelope as `headers`: `[{ "key", "value", "valueBase64" }]`, `value` being the UTF-8 text or `null`, `valueBase64` the bytes; `null` when the record has none. Bowire's own markers (keys starting with `__bowire`) are never sent as headers.
 
 ## Schema Registry (Kafka mode)
 

@@ -31,6 +31,11 @@
 
     <!-- Test-only -->
     <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <!-- The produce E2E (#86) reads the record back through the in-process
+         broker's Kafka listener with the Confluent client. Test-only; the
+         plugin itself carries no Confluent dependency. Same version as the
+         Kafka plugin. -->
+    <PackageVersion Include="Confluent.Kafka" Version="2.16.0" />
     <!-- MTP coverage extension — drives the coverage flag of the new
          dotnet test surface and drops one <guid>.cobertura.xml per test
          project for the Codecov upload. Replaced coverlet.collector, which

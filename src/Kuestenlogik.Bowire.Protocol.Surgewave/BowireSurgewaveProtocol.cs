@@ -270,16 +270,18 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
         try
         {
             var valueBytes = Encoding.UTF8.GetBytes(payload);
+            // #86 - the rest of the metadata goes out as record headers.
+            var headers = SurgewaveRecordHeaders.FromMetadata(sanitisedMetadata);
             ProduceResult result;
             if (sanitisedMetadata?.TryGetValue("partition", out var partitionStr) == true &&
                 int.TryParse(partitionStr, System.Globalization.NumberStyles.Integer,
                     System.Globalization.CultureInfo.InvariantCulture, out var partition))
             {
-                result = await producer.ProduceAsync(service, partition, key, valueBytes, ct);
+                result = await producer.ProduceAsync(service, partition, key, valueBytes, headers, ct);
             }
             else
             {
-                result = await producer.ProduceAsync(service, key, valueBytes, ct);
+                result = await producer.ProduceAsync(service, key, valueBytes, headers, ct);
             }
             sw.Stop();
 
@@ -442,6 +444,8 @@ public sealed class BowireSurgewaveProtocol : IBowireProtocol
             valueBase64 = Convert.ToBase64String(valueBytes),
             bytes = valueBytes.Length,
             encoding,
+            // #86 - what a produce sends as headers is shown when consumed.
+            headers = SurgewaveRecordHeaders.ToEnvelope(result.Headers),
         };
         return JsonSerializer.Serialize(envelope);
     }

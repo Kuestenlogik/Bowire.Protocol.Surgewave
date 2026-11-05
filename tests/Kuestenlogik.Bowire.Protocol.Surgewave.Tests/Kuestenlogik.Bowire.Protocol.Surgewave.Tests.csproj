@@ -12,6 +12,8 @@
     <PackageReference Include="Kuestenlogik.Bowire" />
     <PackageReference Include="Kuestenlogik.Surgewave.Client" />
     <PackageReference Include="Microsoft.Testing.Extensions.CodeCoverage" />
+    <PackageReference Include="Kuestenlogik.Surgewave.Hosting" />
+    <PackageReference Include="Confluent.Kafka" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Kuestenlogik.Bowire.Protocol.Surgewave\Kuestenlogik.Bowire.Protocol.Surgewave.csproj" />
