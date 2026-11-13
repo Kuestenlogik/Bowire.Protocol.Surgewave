@@ -18,6 +18,9 @@
   <ItemGroup>
     <PackageReference Include="Kuestenlogik.Bowire" />
     <PackageReference Include="Kuestenlogik.Surgewave.Client" />
+    <!-- ?protocol=kafka and auto's Kafka fallback: without it every call in
+         that mode throws (#88). -->
+    <PackageReference Include="Kuestenlogik.Surgewave.Client.Kafka" />
     <!-- Apache Avro decode only. The Confluent-wire schema fetch is a plain
          HTTP GET (SurgewaveSchemaRegistry) so the plugin does NOT depend on
          any Confluent library — Confluent stays an opt-in adapter. -->

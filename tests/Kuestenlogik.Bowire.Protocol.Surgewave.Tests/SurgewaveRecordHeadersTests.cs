@@ -92,6 +92,11 @@ public sealed class SurgewaveRecordHeadersE2ETests
             ["Surgewave:Storage"] = "Memory",
             ["Surgewave:AutoCreateTopics"] = "true",
             ["Surgewave:Port"] = port.ToString(System.Globalization.CultureInfo.InvariantCulture),
+            // A broker with memory storage still keeps its cluster id on disk,
+            // by default under the working directory. Two brokers of one test
+            // run would share that file, and the first start of both collided
+            // on it.
+            ["Surgewave:DataDirectory"] = Directory.CreateTempSubdirectory("bowire-surgewave-").FullName,
         });
         builder.AddSurgewave();
         await using var broker = builder.Build();

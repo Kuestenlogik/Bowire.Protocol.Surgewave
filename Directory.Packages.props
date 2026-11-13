@@ -13,12 +13,17 @@
          `dotnet pack` in the Surgewave repo once); from nuget.org for
          release builds. The Broker package backs the sample's embedded
          `surgewave://embedded` tap (AddSurgewaveBroker). -->
-    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.5.2" />
+    <PackageVersion Include="Kuestenlogik.Surgewave.Client" Version="0.6.0" />
+    <!-- The client's Kafka wire transport, which ?protocol=kafka and the
+         Kafka fallback of auto need (#88). Surgewave's own implementation
+         of the Kafka protocol, not a Confluent library. Same release as
+         the client. -->
+    <PackageVersion Include="Kuestenlogik.Surgewave.Client.Kafka" Version="0.6.0" />
     <!-- Surgewave.Hosting backs the sample's self-contained embedded
          broker: builder.AddSurgewave() runs an in-process broker and
          AddSurgewaveProducerForEmbeddedBroker wires a producer to it, so
          the sample needs no docker. Pulls Broker + Client transitively. -->
-    <PackageVersion Include="Kuestenlogik.Surgewave.Hosting" Version="0.5.2" />
+    <PackageVersion Include="Kuestenlogik.Surgewave.Hosting" Version="0.6.0" />
 
     <!-- Apache Avro — decodes Confluent wire-format payloads (5-byte magic +
          schema id + Avro body) in the browser. The schema itself is fetched
