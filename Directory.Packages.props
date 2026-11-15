@@ -35,7 +35,7 @@
     <PackageVersion Include="Apache.Avro" Version="1.12.2" />
 
     <!-- Test-only -->
-    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
     <!-- The produce E2E (#86) reads the record back through the in-process
          broker's Kafka listener with the Confluent client. Test-only; the
          plugin itself carries no Confluent dependency. Same version as the
